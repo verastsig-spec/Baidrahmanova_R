@@ -1,0 +1,25 @@
+    def save_history(self):
+        with open('history.json', 'w', encoding='utf-8') as f:
+            json.dump(self.history, f, ensure_ascii=False, indent=2)
+
+    def load_history(self):
+        if os.path.exists('history.json'):
+            try:
+                with open('history.json', 'r', encoding='utf-8') as f:
+                    self.history = json.load(f)
+            except json.JSONDecodeError:
+                self.history = []
+
+    def update_history_table(self):
+        # Очистка таблицы
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+
+        # Заполнение таблицы
+        for record in self.history:
+            self.tree.insert('', 'end', values=(
+                record['id'],
+                record['password'],
+                record['length'],
+                record['date']
+            ))
